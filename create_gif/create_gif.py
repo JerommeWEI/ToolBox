@@ -16,7 +16,7 @@ def create_gif(input_folder, output_gif, duration=500, ascending=True):
     # Get all PNG files and extract values for sorting
     image_files = []
     for filename in os.listdir(input_folder):
-        if filename.lower().endswith('.png'):
+        if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
             # Extract number from filename using regex - support multiple formats
             match = None
             # Try different patterns to extract numeric values
@@ -43,11 +43,14 @@ def create_gif(input_folder, output_gif, duration=500, ascending=True):
                     sort_value = float(match.group(1))
                     image_files.append((sort_value, filename))
                 except (ValueError, IndexError):
-                    # Skip if extraction fails
-                    continue
+                    # If extraction fails, use filename as sort key
+                    image_files.append((filename, filename))
+            else:
+                # No numeric pattern found, use filename as sort key
+                image_files.append((filename, filename))
 
     if not image_files:
-        print("No valid PNG images found in the folder!")
+        print("No valid PNG/JPG images found in the folder!")
         return
 
     # Sort files based on CRA value
@@ -80,9 +83,9 @@ if __name__ == "__main__":
     # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\05-MEMS2Macleod\02-Analysis\P1s1_W9@30-48 (AA1175)\MEMS_曲线比较"
     # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\05-MEMS2Macleod\02-Analysis\P1s1_W9@30-48 (AA1175)\Same_voltage_Solomon_compare_MEMS"
     # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\00_应用场景\13-TFD 项目\04-应用demo\01-矽赫微\02-显微物镜+Monarch\01-test\cube_20260206_171943\png\Spectra"
-    input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260226152043"
-    input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260302134651"
-    input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260320101408"
+    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260226152043"
+    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260302134651"
+    input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\00_应用场景\15-LED检测\A01-需求输入\20260415-色板测试\03-分析数据\20260421-色度对比"
     output_gif = os.path.join(input_folder,"output.gif")  # Replace with desired output path
     frame_duration = 1000  # Duration in milliseconds for each frame
     sort_ascending = True  # Set to False for descending order

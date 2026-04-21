@@ -5,6 +5,7 @@ from tkinter import filedialog, simpledialog
 import numpy as np
 import pandas as pd
 import math
+import os
 
 # 全局变量
 FPS = 60
@@ -377,4 +378,5 @@ def main():
 
 
 if __name__ == "__main__":
+    os.system('cls' if os.name == 'nt' else 'clear') 
     main()
