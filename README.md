@@ -162,10 +162,26 @@ pip install pygame pillow numpy pandas matplotlib
 pip install pandas numpy matplotlib Pillow pygame
 ```
 
+## 更新日志
+
+### v2.0 (2026年5月)
+
+**新增功能：**
+- create_gif 工具新增 JPG/JPEG 图片格式支持
+- create_gif 工具优化数值提取排序逻辑，支持更多文件名格式
+- take_point_from_picture 工具新增清屏功能，方便重新提取数据点
+
+**改进优化：**
+- create_gif 工具改进文件名数值识别算法，支持 `CRA = 123.45`、`_123nm`、`comparison_123` 等多种格式
+- create_gif 工具增强排序稳定性，无法提取数值时自动按文件名排序
+- README 文档完善工具说明和参数描述
+
+---
+
 ## 版本信息
 
-- **版本：** 1.0
-- **更新日期：** 2026年4月
+- **版本：** 2.0
+- **更新日期：** 2026年5月
 - **作者：** UNS-JeromeWei
 
 ## 许可证
