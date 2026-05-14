@@ -184,13 +184,16 @@ pip install numpy
 
 ### 7. Coating-single-Performance/ - 镀膜性能分析工具
 
-**功能描述：** 分析镀膜光谱数据，计算 ROI 区域反射率统计和阈值波长。
+**功能描述：** 分析镀膜光谱数据，计算 ROI 区域反射率统计和阈值波长，生成 HTML 分析报告。
+
+**版本：** v2.2
 
 **主要功能：**
-- 读取 TXT 格式的光谱数据
-- 计算 ROI 区域平均反射率和标准差
-- 查找 50% 反射率阈值波长
-- 自动生成光谱曲线图并标注 ROI 和阈值
+- 读取 TXT 格式的光谱数据（单曲线和公差多曲线）
+- 计算 ROI 区域平均反射率
+- 查找 50% 反射率阈值波长（Short 阈值 < ROI 起始波长，Long 阈值 > ROI 结束波长）
+- 分析公差数据（thickness 和 thickness-nd）的阈值波动范围
+- 生成包含图表和汇总表格的 HTML 分析报告
 
 **使用方法：**
 将光谱数据放入 `data` 文件夹后运行：
@@ -198,10 +201,22 @@ pip install numpy
 python Coating-single-Performance/coating_analysis.py
 ```
 
+**数据文件命名规则：**
+- `{系列名}.txt` - 基础曲线数据
+- `{系列名}-tolerance-thickness.txt` - 公差考虑厚度的数据（多曲线）
+- `{系列名}-tolerance-thickness-nd.txt` - 公差考虑厚度和折射率的数据（多曲线）
+
 **支持的配置：**
-- UC500：ROI 500-700nm
 - UC700：ROI 700-930nm
+- UC500：ROI 500-700nm
 - UDE450：ROI 450-650nm
+- UMTL450：特定波长点分析（400nm、500nm、600nm、800nm、900nm）
+
+**输出内容：**
+- HTML 报告文件（命名格式：`coating_analysis_YYMMDDHH.html`）
+- 各系列曲线分布图（标记 ROI 范围和 50% 阈值点）
+- 公差分析图（标记阈值最大最小波动范围）
+- 汇总表格（显示基准值 ± 公差偏差）
 
 **依赖：**
 ```bash
@@ -222,6 +237,22 @@ pip install pandas numpy matplotlib Pillow pygame
 ```
 
 ## 更新日志
+
+### v2.2 (2026年5月14日)
+
+**新增功能：**
+- Coating-single-Performance 工具新增 HTML 报告输出功能
+- 新增公差数据分析功能（thickness 和 thickness-nd 多曲线）
+- 新增 UMTL450 系列特定波长点分析（400nm、500nm、600nm、800nm、900nm）
+- 新增汇总表格，显示基准值 ± 公差偏差
+
+**改进优化：**
+- 修正 50% 阈值判断逻辑：Short 阈值必须 < ROI 起始波长，Long 阈值必须 > ROI 结束波长
+- 调整分析顺序：UC700 → UC500 → UDE450 → UMTL450
+- 图表使用 base64 编码直接嵌入 HTML，无需额外图片文件
+- HTML 报告命名添加时间戳（YYMMDDHH 格式）
+
+---
 
 ### v2.1 (2026年5月)
 
@@ -250,8 +281,8 @@ pip install pandas numpy matplotlib Pillow pygame
 
 ## 版本信息
 
-- **版本：** 2.1
-- **更新日期：** 2026年5月
+- **版本：** 2.2
+- **更新日期：** 2026年5月14日
 - **作者：** UNS-JeromeWei
 
 ## 许可证
