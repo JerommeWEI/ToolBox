@@ -16,8 +16,12 @@ Toolkit/
 │   ├── 使用说明SOP.md                  # 使用说明文档
 │   └── exe/                            # 可执行文件目录
 │       └── take_point_from_picture.exe
-└── Trae-Skill/                         # Trae 技能文档
-    └── 绘图防重叠约束 Skill.md
+├── Trae-Skill/                         # Trae 技能文档
+│   └── 绘图防重叠约束 Skill.md
+├── TFD-data-Setup/                     # TFD 数据配置工具
+│   └── TFD-Voltage-MonarchPCBA-setup.py
+└── Coating-single-Performance/         # 镀膜性能分析工具
+    └── coating_analysis.py
 ```
 
 ## 工具说明
@@ -151,6 +155,61 @@ pip install pygame pillow numpy pandas matplotlib
 
 ---
 
+### 6. TFD-data-Setup/ - TFD 数据配置工具
+
+**功能描述：** 读取驱动板校准系数和 LUT 数据，生成 TFD 电压配置文件。
+
+**主要功能：**
+- 读取驱动板校准 CSV 文件，提取 a、b 系数
+- 读取 LUT CSV 文件，根据目标 CWL 提取电压矩阵
+- 基于模板文件生成 TFD 配置文件
+
+**使用方法：**
+修改脚本中的 CSV 路径和 TFD 名称后运行：
+```bash
+python TFD-data-Setup/TFD-Voltage-MonarchPCBA-setup.py
+```
+
+**参数说明：**
+- `criteria_csv_path`：驱动板校准系数 CSV 文件路径
+- `lut_csv_path`：LUT 数据 CSV 文件路径
+- `tfd_name`：TFD 名称（用于输出文件命名）
+
+**依赖：**
+```bash
+pip install numpy
+```
+
+---
+
+### 7. Coating-single-Performance/ - 镀膜性能分析工具
+
+**功能描述：** 分析镀膜光谱数据，计算 ROI 区域反射率统计和阈值波长。
+
+**主要功能：**
+- 读取 TXT 格式的光谱数据
+- 计算 ROI 区域平均反射率和标准差
+- 查找 50% 反射率阈值波长
+- 自动生成光谱曲线图并标注 ROI 和阈值
+
+**使用方法：**
+将光谱数据放入 `data` 文件夹后运行：
+```bash
+python Coating-single-Performance/coating_analysis.py
+```
+
+**支持的配置：**
+- UC500：ROI 500-700nm
+- UC700：ROI 700-930nm
+- UDE450：ROI 450-650nm
+
+**依赖：**
+```bash
+pip install numpy matplotlib
+```
+
+---
+
 ## 系统要求
 
 - Python 3.8+
@@ -163,6 +222,17 @@ pip install pandas numpy matplotlib Pillow pygame
 ```
 
 ## 更新日志
+
+### v2.1 (2026年5月)
+
+**新增功能：**
+- 新增 TFD-data-Setup 工具，用于生成 TFD 电压配置文件
+- 新增 Coating-single-Performance 工具，用于镀膜光谱性能分析
+
+**改进优化：**
+- create_gif 工具更新默认输入路径
+
+---
 
 ### v2.0 (2026年5月)
 
@@ -180,7 +250,7 @@ pip install pandas numpy matplotlib Pillow pygame
 
 ## 版本信息
 
-- **版本：** 2.0
+- **版本：** 2.1
 - **更新日期：** 2026年5月
 - **作者：** UNS-JeromeWei
 
