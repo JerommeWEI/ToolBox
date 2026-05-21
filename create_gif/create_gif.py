@@ -85,7 +85,7 @@ if __name__ == "__main__":
     # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\00_应用场景\13-TFD 项目\04-应用demo\01-矽赫微\02-显微物镜+Monarch\01-test\cube_20260206_171943\png\Spectra"
     # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260226152043"
     # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260302134651"
-    input_folder = r"F:\05-Jerome Studios\Coating Design\Simulate_Output\spectral-calculation\20260512_181502-202605121644-U450-MEMS-Metal-Coating-Ag-J08-angular\FWHM=9"
+    input_folder = r"E:\OneDrive - Unispectral\01_研发\00_应用场景\13-TFD 项目\05-移动版\A02-测试\MEMS_SN_AA0610\P1s1_W4@47-22 (AA0610)\subtest_spectralResponseExpansion"
     output_gif = os.path.join(input_folder,"output.gif")  # Replace with desired output path
     frame_duration = 1000  # Duration in milliseconds for each frame
     sort_ascending = True  # Set to False for descending order
