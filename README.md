@@ -21,13 +21,22 @@ Toolkit/
 |------|------|
 | batch_rename_files.py | 批量重命名，删除文件名中最后一个"-"前的内容 |
 | cal_CWL_FWHM.py | 计算光谱中心波长(CWL)和半高全宽(FWHM) |
-| create_gif/ | 图片按数值排序生成GIF动画 |
+| create_gif/ | 图片按数值排序生成GIF动画，提供独立exe（双击即用） |
 | take_point_from_picture/ | 图片交互式提取坐标，导出CSV |
 | Trae-Skill/ | Matplotlib/Seaborn/Plotly绘图防重叠规范 |
 | TFD-data-Setup/ | 读取校准系数和LUT，生成TFD电压配置 |
 | Coating-single-Performance/ | 镀膜光谱分析，计算ROI反射率和阈值波长，生成HTML报告 |
 
 ## 更新日志
+
+### v2.4 (2026年5月29日)
+
+**create_gif 改进：**
+- 新增独立 exe 可执行文件（18MB，双击即用，无需安装 Python）
+- 入口改为 GUI 交互：文件夹选择对话框、帧间隔设置、排序方式选择
+- 移除硬编码路径，开箱即用
+
+---
 
 ### v2.3 (2026年5月21日)
 
@@ -66,8 +75,8 @@ Toolkit/
 
 ## 版本信息
 
-- **版本：** 2.3
-- **更新日期：** 2026年5月21日
+- **版本：** 2.4
+- **更新日期：** 2026年5月29日
 - **作者：** UNS-JeromeWei
 
 ## 许可证

@@ -1,5 +1,8 @@
 import os
 import re
+import sys
+import tkinter as tk
+from tkinter import filedialog, simpledialog, messagebox
 from PIL import Image
 
 
@@ -78,16 +81,22 @@ def create_gif(input_folder, output_gif, duration=500, ascending=True):
 
 
 if __name__ == "__main__":
-    # Example usage
-    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260203145236"  # Replace with your folder path
-    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\05-MEMS2Macleod\02-Analysis\P1s1_W9@30-48 (AA1175)\MEMS_曲线比较"
-    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\05-MEMS2Macleod\02-Analysis\P1s1_W9@30-48 (AA1175)\Same_voltage_Solomon_compare_MEMS"
-    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\00_应用场景\13-TFD 项目\04-应用demo\01-矽赫微\02-显微物镜+Monarch\01-test\cube_20260206_171943\png\Spectra"
-    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260226152043"
-    # input_folder = r"E:\AA_repository\OneDrive - Unispectral Qingdao Microelectronics Co. LTD\01_研发\01-开发相关\10-计算光谱\A01-script\01-sample code\fpi_cs_sim\20260302134651"
-    input_folder = r"E:\OneDrive - Unispectral\01_研发\00_应用场景\13-TFD 项目\05-移动版\A02-测试\MEMS_SN_AA0610\P1s1_W4@47-22 (AA0610)\subtest_spectralResponseExpansion"
-    output_gif = os.path.join(input_folder,"output.gif")  # Replace with desired output path
-    frame_duration = 1000  # Duration in milliseconds for each frame
-    sort_ascending = True  # Set to False for descending order
+    root = tk.Tk()
+    root.withdraw()
 
-    create_gif(input_folder, output_gif, frame_duration, sort_ascending)
+    input_folder = filedialog.askdirectory(title="选择包含图片的文件夹")
+    if not input_folder:
+        messagebox.showwarning("提示", "未选择文件夹，程序退出")
+        sys.exit()
+
+    duration = simpledialog.askinteger(
+        "帧间隔", "请输入每帧持续时间（毫秒）：", initialvalue=500, minvalue=50, maxvalue=10000
+    )
+    if duration is None:
+        duration = 500
+
+    ascending = messagebox.askyesno("排序方式", "按数值升序排列？\n\n是 = 升序（小→大）\n否 = 降序（大→小）")
+
+    output_gif = os.path.join(input_folder, "output.gif")
+    create_gif(input_folder, output_gif, duration, ascending)
+    messagebox.showinfo("完成", f"GIF 已保存至：\n{output_gif}")
