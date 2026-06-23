@@ -12,7 +12,9 @@ Toolkit/
 ├── take_point_from_picture/            # 图片坐标提取
 ├── Trae-Skill/                         # Trae 技能文档
 ├── TFD-data-Setup/                     # TFD 数据配置
-└── Coating-single-Performance/         # 镀膜性能分析
+├── Coating-single-Performance/         # 镀膜性能分析
+├── Asc2CSV/                            # ASC 光谱数据转 CSV
+└── Transmission-compare/               # 透射率曲线对比
 ```
 
 ## 工具说明
@@ -26,8 +28,23 @@ Toolkit/
 | Trae-Skill/ | Matplotlib/Seaborn/Plotly绘图防重叠规范 |
 | TFD-data-Setup/ | 读取校准系数和LUT，生成TFD电压配置 |
 | Coating-single-Performance/ | 镀膜光谱分析，计算ROI反射率和阈值波长，生成HTML报告 |
+| Asc2CSV/ | 批量解析ASC光谱文件，导出波长/透射率CSV数据 |
+| Transmission-compare/ | 批量读取透射率TXT数据，绘制多曲线对比图 |
 
 ## 更新日志
+
+### v2.5 (2026年6月23日)
+
+**新增工具：**
+- 新增 Asc2CSV，支持批量将 ASC 光谱数据转换为 CSV
+- ASC 解析支持 `#DATA` 数据段识别，缺失时自动提取最长连续数值块
+- 新增 Transmission-compare，用于批量绘制透射率曲线对比图
+
+**Coating-single-Performance 改进：**
+- 兼容包含 `T_mean`、`T_std`、`T_min`、`T_max`、`T_1...T_N` 的新格式数据
+- TXT/CSV 数据读取改为 UTF-8 编码，提升中文路径和表头兼容性
+
+---
 
 ### v2.4 (2026年5月29日)
 
@@ -75,8 +92,8 @@ Toolkit/
 
 ## 版本信息
 
-- **版本：** 2.4
-- **更新日期：** 2026年5月29日
+- **版本：** 2.5
+- **更新日期：** 2026年6月23日
 - **作者：** UNS-JeromeWei
 
 ## 许可证

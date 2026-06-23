@@ -20,23 +20,33 @@ def find_data_file(data_dir, base_name):
         return csv_path
     return txt_path
 
+def is_new_format(lines):
+    """Detect new data format: first non-comment line (header) contains 'T_mean'."""
+    for line in lines:
+        s = line.strip()
+        if s and not s.startswith('#'):
+            return 'T_mean' in s
+    return False
+
 def read_single_file(filepath, use_transmittance=False):
     data = []
     delimiter = get_delimiter(filepath)
-    with open(filepath, 'r') as f:
+    with open(filepath, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-        for line in lines[1:]:
-            parts = line.strip().split(delimiter)
-            if len(parts) >= 3:
-                try:
-                    wavelength = float(parts[0].strip())
-                    if use_transmittance:
-                        value = float(parts[2].strip())
-                    else:
-                        value = float(parts[1].strip())
-                    data.append([wavelength, value])
-                except ValueError:
-                    continue
+    new_format = is_new_format(lines)
+    if use_transmittance:
+        value_col = 1 if new_format else 2
+    else:
+        value_col = 1
+    for line in lines:
+        parts = line.strip().split(delimiter)
+        if len(parts) > value_col:
+            try:
+                wavelength = float(parts[0].strip())
+                value = float(parts[value_col].strip())
+                data.append([wavelength, value])
+            except ValueError:
+                continue
     return np.array(data)
 
 def check_curve_validity(data, max_slope_threshold=5.0):
@@ -60,25 +70,61 @@ def check_curve_validity(data, max_slope_threshold=5.0):
 def read_tolerance_file(filepath, use_transmittance=False, max_slope_threshold=5.0):
     all_curves = []
     delimiter = get_delimiter(filepath)
-    with open(filepath, 'r') as f:
+    with open(filepath, 'r', encoding='utf-8') as f:
         lines = f.readlines()
         if len(lines) < 2:
             return all_curves
-        header = lines[0].strip().split(delimiter)
-        num_pairs = len(header) // 2
-        for i in range(num_pairs):
-            all_curves.append([])
-        for line in lines[1:]:
-            parts = line.strip().split(delimiter)
+        new_format = is_new_format(lines)
+        if new_format:
+            # New format: col0=wavelength, then T_mean,T_std,T_min,T_max (4 cols),
+            # then T_1..T_N curve columns. Each curve shares the wavelength column.
+            header_line = None
+            for line in lines:
+                s = line.strip()
+                if s and not s.startswith('#'):
+                    header_line = s
+                    break
+            if header_line is None:
+                return all_curves
+            ncols = len(header_line.split(delimiter))
+            num_curves = ncols - 5
+            if num_curves <= 0:
+                return all_curves
+            all_curves = [[] for _ in range(num_curves)]
+            for line in lines:
+                s = line.strip()
+                if not s or s.startswith('#'):
+                    continue
+                parts = s.split(delimiter)
+                try:
+                    wavelength = float(parts[0].strip())
+                except (ValueError, IndexError):
+                    continue
+                for i in range(num_curves):
+                    idx = 5 + i
+                    if idx < len(parts):
+                        try:
+                            value = float(parts[idx].strip())
+                            all_curves[i].append([wavelength, value])
+                        except ValueError:
+                            continue
+        else:
+            # Old format: interleaved Wavelength-Value column pairs.
+            header = lines[0].strip().split(delimiter)
+            num_pairs = len(header) // 2
             for i in range(num_pairs):
-                idx = i * 2
-                if idx + 1 < len(parts):
-                    try:
-                        wavelength = float(parts[idx].strip())
-                        value = float(parts[idx + 1].strip())
-                        all_curves[i].append([wavelength, value])
-                    except ValueError:
-                        continue
+                all_curves.append([])
+            for line in lines[1:]:
+                parts = line.strip().split(delimiter)
+                for i in range(num_pairs):
+                    idx = i * 2
+                    if idx + 1 < len(parts):
+                        try:
+                            wavelength = float(parts[idx].strip())
+                            value = float(parts[idx + 1].strip())
+                            all_curves[i].append([wavelength, value])
+                        except ValueError:
+                            continue
     result = []
     invalid_count = 0
     for curve in all_curves:
